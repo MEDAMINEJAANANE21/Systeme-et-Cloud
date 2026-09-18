@@ -1,4 +1,4 @@
-public class ExempleThread1 extends Thread {
+public class ExempleThread1 implements Runnable {
 
     private String toSay;
     private int toWait;
@@ -20,10 +20,12 @@ public class ExempleThread1 extends Thread {
         thread1=new ExempleThread1("Hello ");
         thread2=new ExempleThread1("World ");
         thread3=new ExempleThread1("and Everybody ");
-
-        thread1.start();
-        thread2.start();
-        thread3.start();
+        
+        
+        new Thread(thread1).start();
+        new Thread(thread2).start();
+        new Thread(thread3).start();
+       
 
         System.exit(0);
     }
