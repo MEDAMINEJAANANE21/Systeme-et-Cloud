@@ -36,5 +36,6 @@ public class ExempleThread3bis extends Thread {
         thread2.start();
         thread3.start();
     }
+    // c'est une boucle infinie donc les threads ne termine jamais, pour les tuer il faut tuer tous le processus
 
 }
