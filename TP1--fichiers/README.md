@@ -32,7 +32,7 @@ En diminuant la valeur d'attente même à `1` le thread main se termine trop rap
 Si on met de trop grandes valeurs pour le sleep d'un thread ce dernier met trop de temps à afficher le message que le
 père l'a déjà tué.
 
-### 2.4 `ExempleThread2`
+### 2.4 `ExempleThread3`
 
 > Étudier ensuite le code et le comportement des programmes ExempleThread3bis
 ExempleThread3ter. Expliquer les diﬀérences observées à l’aide de la documen-
@@ -61,3 +61,11 @@ Voici un extrait de la documentation de java sur les Thread (des fils d'exécuti
 > - The exit method of class Runtime has been called and the security manager has permitted the exit operation to take place.
 > - All threads that are not daemon threads have died, either by returning from the call to the run method or by throwing an exception that propagates beyond the run method.
 
+### 2.5 `ExempleThread4`
+
+En éxécutant plusieurs fois le programme, il y a plusieurs cas où le résultat est différent, cela s'explique du fait que 
+le tableau est partagé par plusieurs threads qui font des opérations de lecture et écriture en concurrence, et donc sans 
+système de syncronization on tombe sur des cas de «**perte de mise à jour**» où un thread écrit une valeur et un autre
+l'écrase tout de suite après.
+
+### 2.6 `ExempleThread5`

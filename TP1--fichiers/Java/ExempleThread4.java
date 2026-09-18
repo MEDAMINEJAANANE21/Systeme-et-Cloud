@@ -16,14 +16,14 @@ public class ExempleThread4  {
         }
 
         for (int j = 0; j < NBTHREADS; j++) {
-            threadsD[j].start();
-            threadsR[j].start();
+            new Thread(threadsD[j]).start();
+            new Thread(threadsR[j]).start();
         }
 
         try {
             for (int j = 0; j < NBTHREADS; j++) {
-                threadsD[j].join();
-                threadsR[j].join();
+                new Thread(threadsD[j]).join();
+                new Thread(threadsR[j]).join();
             }
         } catch (InterruptedException e) {
             UnexpectedSituation.exit("interrupted join in thread "+ Thread.currentThread().getName(), e);

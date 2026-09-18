@@ -1,7 +1,7 @@
 /**
  * Thread qui depose
  */
-class ThreadDeposer extends Thread {
+class ThreadDeposer implements Runnable {
 
     private int number;
     private Tableau t;
@@ -13,6 +13,7 @@ class ThreadDeposer extends Thread {
         this.nbIter = nbIterations;
     }
 
+    @Override
     public void run() {
         for (int j = 0; j < nbIter; j++) {
             t.incTab();
