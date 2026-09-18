@@ -23,13 +23,14 @@ public class ExempleThread3 extends Thread {
     public static void  main(String args[]) {
         ExempleThread3 thread1, thread2, thread3;
         thread1=new ExempleThread3(1, "Hello ", 50);
-        thread2=new ExempleThread3(2, "World ",25);
-        thread3=new ExempleThread3(3, "and Everybody ",40);
+        thread2=new ExempleThread3(3, "World ",1);
+        thread3=new ExempleThread3(2, "and Everybody ",2);
 
         thread1.start();
         thread2.start();
         thread3.start();
 
+        // ici c'est juste le pere qui attend la terminaison de tous les threads
         try {
             thread1.join();
             thread2.join();
