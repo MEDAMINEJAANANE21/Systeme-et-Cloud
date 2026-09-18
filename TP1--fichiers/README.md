@@ -1,5 +1,5 @@
 
-### 2.2
+### 2.2 `ExempleThread1`
 
 > Que pouvez vous dire à propos de l’ordre d’aﬃchage? Expliquer. Que pouvez
 vous dire à propos du nombre d’aﬃchages? Expliquer.
@@ -15,3 +15,49 @@ On remarque aussi qu'on n'a pas toujours le même nombre d'affichages.
 
 Sauf qu'après que le père a crée ses fils il tue le processus courant directement (`exit(0)`) ce qui entraine la mort
 de tous les autres threads du processus. Et donc des fois les fils on le temps de s'éxécuter avant leur mort.
+
+En utilisant l'interface `Runnable` on ne remarque pas de différence.
+
+### 2.3 `ExempleThread2`
+
+> Voyez vous tous les aﬃchages? Essayez de diminuer et d’augmenter les valeurs d’at-
+tente (les arguments passés lors de la création des threads qui sont utilisés pour
+les appels à sleep). Si vous mettez de trop grandes valeurs, vous risquez de ne
+plus voir aucun aﬃchage. Pourquoi?
+
+Non, on ne voit pas tous les affichages.
+
+En diminuant la valeur d'attente même à `1` le thread main se termine trop rapidement.
+
+Si on met de trop grandes valeurs pour le sleep d'un thread ce dernier met trop de temps à afficher le message que le
+père l'a déjà tué.
+
+### 2.4 `ExempleThread2`
+
+> Étudier ensuite le code et le comportement des programmes ExempleThread3bis
+ExempleThread3ter. Expliquer les diﬀérences observées à l’aide de la documen-
+tation Java. 
+
+Un thread attend ses thread fils dans deux cas : 
+
+1. En utilisant `.join()`.
+2. S'il n'y a pas de `exit()` dans le thread père.
+
+Sinon ce thread se termine et tout ses threads fils non daemon se terminent aussi.
+
+Donc la différence entre `ExempleThread3bis` et `ExempleThread3ter` :
+
+- `ExempleThread3ter` :
+    - Le processus qui contient les 4 threads attends la terminaison de ses threads car ils ne sont pas daemon et
+      il n'y a ni de `exit()` ni de `join()`.
+
+- `ExempleThread3bis` :
+    - Le processus qui contient les 4 threads n'attends pas ses threads fils car ils sont des `daemon`.
+
+Voici un extrait de la documentation de java sur les Thread (des fils d'exécution dans un processus) : [Class Thread](https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html#:~:text=When%20a%20Java,the%20run%20method.)
+
+> When a Java Virtual Machine starts up, there is usually a single non-daemon thread (which typically calls the method named main of some designated class). The Java Virtual Machine continues to execute threads until either of the following occurs:
+>
+> - The exit method of class Runtime has been called and the security manager has permitted the exit operation to take place.
+> - All threads that are not daemon threads have died, either by returning from the call to the run method or by throwing an exception that propagates beyond the run method.
+
