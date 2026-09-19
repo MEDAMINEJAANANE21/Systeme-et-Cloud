@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d42ed5f5-6ab3-4853-b603-ccf8c0c16b2f" name="Changes" comment="add: ajoute gitignore">
+    <list default="true" id="d42ed5f5-6ab3-4853-b603-ccf8c0c16b2f" name="Changes" comment="add: update gitignore + readme (until 2.5)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1--fichiers/Java/ExempleThread4.java" beforeDir="false" afterPath="$PROJECT_DIR$/TP1--fichiers/Java/ExempleThread4.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1--fichiers/Java/ThreadDeposer.java" beforeDir="false" afterPath="$PROJECT_DIR$/TP1--fichiers/Java/ThreadDeposer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1--fichiers/Java/ThreadRetirer.java" beforeDir="false" afterPath="$PROJECT_DIR$/TP1--fichiers/Java/ThreadRetirer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP1--fichiers/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/TP1--fichiers/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,6 +47,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.ExempleThread4.executor": "Run",
+    "Application.ExempleThread5.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -67,9 +65,16 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.ExempleThread5">
     <configuration name="ExempleThread4" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ExempleThread4" />
+      <module name="Systeme-et-Cloud" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ExempleThread5" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ExempleThread5" />
       <module name="Systeme-et-Cloud" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -88,6 +93,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ExempleThread5" />
         <item itemvalue="Application.ExempleThread4" />
       </list>
     </recent_temporary>
@@ -109,7 +115,7 @@
       <updated>1789734686294</updated>
       <workItem from="1789734687554" duration="8443000" />
       <workItem from="1789745734313" duration="57000" />
-      <workItem from="1789745794327" duration="5767000" />
+      <workItem from="1789745794327" duration="8344000" />
     </task>
     <task id="LOCAL-00001" summary="add: ajoute gitignore">
       <option name="closed" value="true" />
@@ -127,7 +133,15 @@
       <option name="project" value="LOCAL" />
       <updated>1789745861452</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add: update gitignore + readme (until 2.5)">
+      <option name="closed" value="true" />
+      <created>1789752549976</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1789752549976</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -135,6 +149,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add: ajoute gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: ajoute gitignore" />
+    <MESSAGE value="add: update gitignore + readme (until 2.5)" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: update gitignore + readme (until 2.5)" />
   </component>
 </project>
