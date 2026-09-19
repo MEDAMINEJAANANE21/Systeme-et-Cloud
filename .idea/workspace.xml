@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d42ed5f5-6ab3-4853-b603-ccf8c0c16b2f" name="Changes" comment="add: ajoute 3.1">
-      <change afterPath="$PROJECT_DIR$/TP1--fichiers/Java/SleepingThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="d42ed5f5-6ab3-4853-b603-ccf8c0c16b2f" name="Changes" comment="add: ajoute 3.2 (fin TP)">
       <change beforePath="$PROJECT_DIR$/TP1--fichiers/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/TP1--fichiers/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -131,7 +128,7 @@
       <updated>1789734686294</updated>
       <workItem from="1789734687554" duration="8443000" />
       <workItem from="1789745734313" duration="57000" />
-      <workItem from="1789745794327" duration="14022000" />
+      <workItem from="1789745794327" duration="14355000" />
     </task>
     <task id="LOCAL-00001" summary="add: ajoute gitignore">
       <option name="closed" value="true" />
@@ -173,7 +170,15 @@
       <option name="project" value="LOCAL" />
       <updated>1789816965770</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add: ajoute 3.2 (fin TP)">
+      <option name="closed" value="true" />
+      <created>1789819892470</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1789819892470</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,6 +189,7 @@
     <MESSAGE value="add: update gitignore + readme (until 2.5)" />
     <MESSAGE value="add: ajoute 2.6 (Thread5)" />
     <MESSAGE value="add: ajoute 3.1" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: ajoute 3.1" />
+    <MESSAGE value="add: ajoute 3.2 (fin TP)" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: ajoute 3.2 (fin TP)" />
   </component>
 </project>
