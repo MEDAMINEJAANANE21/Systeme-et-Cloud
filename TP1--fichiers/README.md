@@ -1,3 +1,10 @@
+# Rendue TP1 - Système & Cloud
+
+##### Mohamed-Amine JAANANE - Omar BARKOK | 18-09-2026
+
+##### [Repo GitHub de notre solution du TP1](https://github.com/MEDAMINEJAANANE21/Systeme-et-Cloud/tree/9d1e08edc97f78dd87597adf89e355b74adee567/TP1--fichiers)
+
+---
 
 ### 2.2 `ExempleThread1`
 
@@ -69,3 +76,8 @@ système de syncronization on tombe sur des cas de «**perte de mise à jour**»
 l'écrase tout de suite après.
 
 ### 2.6 `ExempleThread5`
+
+En comparant les deux version, on remarque l'ajout du mot clès `syncronized` dans le prototype des méthodes `synchronized void incTab()` et `synchronized void decTab()`
+ce qui permet de «privatiser» l'accès à ces méthodes à 1 seul thread à la fois.
+
+
