@@ -90,8 +90,6 @@ Oui, il est possible que `usr + sys > real` pour comprendre pourquoi cela est po
 - **`sys`** : temps CPU consommé par le noyau du système d'exploitation pour le compte du processus (appels système, gestion mémoire, entrées/sorties, création de threads, etc.).
 - **`real`** : temps horloge total écoulé (*wall-clock time*) entre le lancement et la fin de la commande, incluant le calcul, l'attente et la concurrence avec d'autres processus.
 
-> Définitions extraites depuis *Perplexitiy* : [prompt chat](https://www.perplexity.ai/search/db817c33-bf1f-4979-b795-f3289e498e79)
-
 #### Les deux cas de `real`
 
 - **`real` > `usr + sys`** : le programme passe du temps à attendre (disque, réseau, verrou concurrent, autre processus) sans consommer de CPU pendant cette attente.
