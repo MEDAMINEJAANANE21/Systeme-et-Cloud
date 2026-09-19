@@ -80,4 +80,22 @@ l'écrase tout de suite après.
 En comparant les deux version, on remarque l'ajout du mot clès `syncronized` dans le prototype des méthodes `synchronized void incTab()` et `synchronized void decTab()`
 ce qui permet de «privatiser» l'accès à ces méthodes à 1 seul thread à la fois.
 
+## 3 TP1 deuxième partie : lien avec le système d’exploitation
 
+### 3.1 Chronométrage
+
+> Est-il possible d’avoir `usr + sys > real` ? Si oui, comment peut-on l’expliquer ? Sinon
+pourquoi?
+
+Oui, il est possible que `usr + sys > real` pour comprendre pourquoi cela est possible on a cherché la définition de chaque valeur :
+
+- **`usr`** : temps CPU consommé par le processus pour exécuter le code en mode utilisateur (calculs, boucles, logique du programme).
+- **`sys`** : temps CPU consommé par le noyau du système d'exploitation pour le compte du processus (appels système, gestion mémoire, entrées/sorties, création de threads, etc.).
+- **`real`** : temps horloge total écoulé (*wall-clock time*) entre le lancement et la fin de la commande, incluant le calcul, l'attente et la concurrence avec d'autres processus.
+
+> Définitions extraites depuis *Perplexitiy* : [prompt chat](https://www.perplexity.ai/search/db817c33-bf1f-4979-b795-f3289e498e79)
+
+#### Les deux cas de `real`
+
+- **`real` > `usr + sys`** : le programme passe du temps à attendre (disque, réseau, verrou concurrent, autre processus) sans consommer de CPU pendant cette attente.
+- **`real` < `usr + sys`** : le programme exploite plusieurs cœurs CPU en parallèle (multithreading), donc le temps CPU cumulé dépasse le temps horloge réel.
