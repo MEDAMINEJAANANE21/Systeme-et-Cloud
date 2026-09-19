@@ -27,10 +27,9 @@ En utilisant l'interface `Runnable` on ne remarque pas de différence.
 
 ### 2.3 `ExempleThread2`
 
-> Voyez vous tous les aﬃchages? Essayez de diminuer et d’augmenter les valeurs d’at-
-tente (les arguments passés lors de la création des threads qui sont utilisés pour
-les appels à sleep). Si vous mettez de trop grandes valeurs, vous risquez de ne
-plus voir aucun aﬃchage. Pourquoi?
+> Voyez vous tous les aﬃchages? Essayez de diminuer et d’augmenter les valeurs d’attente (les arguments passés lors de
+> la création des threads qui sont utilisés pour les appels à sleep). Si vous mettez de trop grandes valeurs,
+> vous risquez de ne plus voir aucun aﬃchage. Pourquoi?
 
 Non, on ne voit pas tous les affichages.
 
@@ -41,9 +40,8 @@ père l'a déjà tué.
 
 ### 2.4 `ExempleThread3`
 
-> Étudier ensuite le code et le comportement des programmes ExempleThread3bis
-ExempleThread3ter. Expliquer les diﬀérences observées à l’aide de la documen-
-tation Java. 
+> Étudier ensuite le code et le comportement des programmes ExempleThread3bis ExempleThread3ter.
+> Expliquer les diﬀérences observées à l’aide de la documentation Java. 
 
 Un thread attend ses thread fils dans deux cas : 
 
@@ -84,8 +82,7 @@ ce qui permet de «privatiser» l'accès à ces méthodes à 1 seul thread à la
 
 ### 3.1 Chronométrage
 
-> Est-il possible d’avoir `usr + sys > real` ? Si oui, comment peut-on l’expliquer ? Sinon
-pourquoi?
+> Est-il possible d’avoir `usr + sys > real` ? Si oui, comment peut-on l’expliquer ? Sinon pourquoi?
 
 Oui, il est possible que `usr + sys > real` pour comprendre pourquoi cela est possible on a cherché la définition de chaque valeur :
 
@@ -99,3 +96,60 @@ Oui, il est possible que `usr + sys > real` pour comprendre pourquoi cela est po
 
 - **`real` > `usr + sys`** : le programme passe du temps à attendre (disque, réseau, verrou concurrent, autre processus) sans consommer de CPU pendant cette attente.
 - **`real` < `usr + sys`** : le programme exploite plusieurs cœurs CPU en parallèle (multithreading), donc le temps CPU cumulé dépasse le temps horloge réel.
+
+### 3.2 Niveau d’implémentation des threads
+
+Voici l'implémentation demandé : [SleepingThread](Java/SleepingThread.java)
+
+```java
+import java.util.concurrent.TimeUnit;
+
+public class SleepingThread extends Thread {
+    public static final int TWOMINUTES = 120000;
+
+    public SleepingThread() {
+    }
+
+    @Override
+    public void run() {
+        try {
+            System.out.println("I am sleeping zzz...");
+            TimeUnit.MILLISECONDS.sleep(TWOMINUTES);
+        } catch (InterruptedException e) {
+            UnexpectedSituation.exit("interrupted sleep in thread "+ Thread.currentThread().getName(), e);
+        }
+    }
+
+    public static void main(String[] argv) {
+        if (argv.length < 1) {
+            System.err.println("Il faut un nombre de threads en argument !");
+            System.exit(1);
+        }
+
+        final int nbThreads = Integer.parseInt(argv[0]);
+        SleepingThread[] sleepingThreads = new SleepingThread[nbThreads];
+
+        for (int i = 0; i < nbThreads; i++) {
+            sleepingThreads[i] = new SleepingThread();
+            sleepingThreads[i].start();
+        }
+
+        System.out.println("I have started all my children :p");
+
+        for (int i = 0; i < nbThreads; i++) {
+            try {
+                sleepingThreads[i].join();
+            } catch (InterruptedException e) {
+                UnexpectedSituation.exit("interrupted join in thread "+ Thread.currentThread().getName(), e);
+            }
+        }
+
+        System.exit(0);
+    }
+}
+```
+
+> En déduire le type d’implémentation utilisé par la machine virtuelle Java
+> pour la gestion des threads de l’application (threads “utilisateur” ou threads “noyau”).
+
+Pour l'instant on n'a pas réussi à bien comprendre le type d'implémentation utilisé par la JVM pour la gestion des threads.
