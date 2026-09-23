@@ -150,4 +150,4 @@ public class SleepingThread extends Thread {
 > En déduire le type d’implémentation utilisé par la machine virtuelle Java
 > pour la gestion des threads de l’application (threads “utilisateur” ou threads “noyau”).
 
-Pour l'instant on n'a pas réussi à bien comprendre le type d'implémentation utilisé par la JVM pour la gestion des threads.
+On déduit que pour la gestion des threads, la JVM les utilise en mode noyau.
