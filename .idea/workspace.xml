@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d42ed5f5-6ab3-4853-b603-ccf8c0c16b2f" name="Changes" comment="fix: minor fix TP1/README">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="d42ed5f5-6ab3-4853-b603-ccf8c0c16b2f" name="Changes" comment="add: ressources des tps">
+      <change afterPath="$PROJECT_DIR$/TP2--fichiers/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +41,7 @@
   <component name="ProjectId" id="3JV84sDkbmgsWPKVSDEhs6iSL36" />
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="false" id="Update" />
+    <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -130,7 +130,7 @@
       <workItem from="1789907327904" duration="17000" />
       <workItem from="1790074395343" duration="7000" />
       <workItem from="1790074411457" duration="442000" />
-      <workItem from="1790334254230" duration="699000" />
+      <workItem from="1790334254230" duration="1008000" />
     </task>
     <task id="LOCAL-00001" summary="add: ajoute gitignore">
       <option name="closed" value="true" />
@@ -180,7 +180,23 @@
       <option name="project" value="LOCAL" />
       <updated>1789819892470</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="refactor: update gitignore">
+      <option name="closed" value="true" />
+      <created>1790338580432</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1790338580432</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add: ressources des tps">
+      <option name="closed" value="true" />
+      <created>1790338780959</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1790338780959</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -192,6 +208,8 @@
     <MESSAGE value="add: ajoute 2.6 (Thread5)" />
     <MESSAGE value="add: ajoute 3.1" />
     <MESSAGE value="add: ajoute 3.2 (fin TP)" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: ajoute 3.2 (fin TP)" />
+    <MESSAGE value="refactor: update gitignore" />
+    <MESSAGE value="add: ressources des tps" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: ressources des tps" />
   </component>
 </project>
