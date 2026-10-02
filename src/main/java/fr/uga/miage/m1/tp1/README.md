@@ -97,7 +97,7 @@ Oui, il est possible que `usr + sys > real` pour comprendre pourquoi cela est po
 
 ### 3.2 Niveau d’implémentation des threads
 
-Voici l'implémentation demandé : [SleepingThread](src/main/Java/SleepingThread.java)
+Voici l'implémentation demandé : [SleepingThread](SleepingThread.java)
 
 ```java
 import java.util.concurrent.TimeUnit;
