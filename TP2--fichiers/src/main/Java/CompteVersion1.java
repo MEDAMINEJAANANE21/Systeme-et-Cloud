@@ -1,8 +1,10 @@
-class CompteVersion2 extends Compte {
+package fr.uga.miage.m1.tp2;
+
+class CompteVersion1 extends Compte {
 
     protected double solde;
 
-    CompteVersion2(double i) {
+    CompteVersion1(double i) {
         solde = i;
     }
 
@@ -18,14 +20,13 @@ class CompteVersion2 extends Compte {
         String curNumber = (Thread.currentThread()).getName();
         System.out.println(curNumber + " DEBUT retirer " + solde);
         try {
-            if (solde < montant) {
+            while (solde < montant)
                 wait();
-            }
         } catch (InterruptedException e) {
             UnexpectedSituation.exit("interrupted wait in thread "+ Thread.currentThread().getName(), e);
         }
         solde = solde - montant;
-        System.out.println(curNumber + " |---- retirer " + solde);
+        System.out.println(curNumber + " |---- retirer ");
     }
 
     public synchronized double consulter() {

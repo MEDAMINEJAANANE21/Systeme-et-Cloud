@@ -1,4 +1,6 @@
-public class ExempleThread6 {
+package fr.uga.miage.m1.tp2;
+
+public class ExempleThread7 {
 
     private static final int NBTHREADS = 20;
     private static final int ITERATIONS = 1000;
@@ -7,7 +9,8 @@ public class ExempleThread6 {
         Thread threadsD[] = new Thread[NBTHREADS];
         Thread threadsR[] = new Thread[NBTHREADS];
 
-        Compte compte = new CompteVersion1(0);
+        Compte compte = new CompteVersion2(0);
+
 
         for (int j = 0; j < NBTHREADS; j++) {
             threadsD[j]=new Thread(new ThreadDeposer(j, compte, ITERATIONS));
@@ -17,9 +20,13 @@ public class ExempleThread6 {
         }
 
         for (int j = 0; j < NBTHREADS; j++) {
-            threadsD[j].start();
             threadsR[j].start();
         }
+
+        for (int j = 0; j < NBTHREADS; j++) {
+            threadsD[j].start();
+        }
+
 
         try {
             for (int j = 0; j < NBTHREADS; j++) {

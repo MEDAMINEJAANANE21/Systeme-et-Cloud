@@ -1,3 +1,5 @@
+package fr.uga.miage.m1.tp2;
+
 public class UnexpectedSituation {
 
     public static void exit(String s, Exception e) {

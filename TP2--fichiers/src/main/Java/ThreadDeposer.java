@@ -1,3 +1,5 @@
+package fr.uga.miage.m1.tp2;
+
 /**
  * Thread qui depose
  */
