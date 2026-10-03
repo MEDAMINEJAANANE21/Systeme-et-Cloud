@@ -6,24 +6,26 @@ public class ThreadConsommer implements Runnable {
     private final int id;
     private Object lastConsumedObj;
     private final int iterations;
+    private final int sleeptime;
 
-    public ThreadConsommer(Stockage stockage, int threadId, int iterations) {
+    public ThreadConsommer(Stockage stockage, int threadId, int iterations, int sleeptime) {
         this.stockage = stockage;
         this.id = threadId;
         this.lastConsumedObj = null;
         this.iterations = iterations;
+        this.sleeptime = sleeptime > 0 ? sleeptime : 2000;
     }
 
     @Override
     public void run() {
         for (int i=0; i < iterations; i++) {
             setLastConsumedObj(this.stockage.consommer(this));
+            sleep(sleeptime);
         }
     }
 
     public void sleep(int millis) {
         try {
-            System.out.println("sleep time====="+millis);
             java.lang.Thread.sleep(millis);
         } catch (InterruptedException e) {
             UnexpectedSituation.exit("interrupted wait in consumer thread ["+id+"]", e);

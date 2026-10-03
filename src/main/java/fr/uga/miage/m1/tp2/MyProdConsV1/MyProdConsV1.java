@@ -3,8 +3,9 @@ package fr.uga.miage.m1.tp2.MyProdConsV1;
 import fr.uga.miage.m1.tp2.UnexpectedSituation;
 
 public class MyProdConsV1 {
-    public static final int NBTHREADS = 20;
-    public static final int ITERATIONS = 100;
+    public static final int NBTHREADS = 10;
+    public static final int ITERATIONS = 50;
+    public static final int SLEEPTIME = 5000;
 
      static final void main(String[] args) {
 
@@ -14,9 +15,9 @@ public class MyProdConsV1 {
         Thread[] threadsCons = new Thread[NBTHREADS];
 
         for (int id=0; id < NBTHREADS; id++) {
-            threadsProd[id] = new Thread(new ThreadProduire(memory, id, ITERATIONS));
+            threadsProd[id] = new Thread(new ThreadProduire(memory, id, ITERATIONS, SLEEPTIME));
             threadsProd[id].setName(id+"");
-            threadsCons[id] = new Thread(new ThreadConsommer(memory, id, ITERATIONS));
+            threadsCons[id] = new Thread(new ThreadConsommer(memory, id, ITERATIONS, SLEEPTIME));
             threadsCons[id].setName((id+NBTHREADS)+"");
         }
 
@@ -34,7 +35,8 @@ public class MyProdConsV1 {
              UnexpectedSituation.exit("interrupted join in thread "+ Thread.currentThread().getName(), e);
         }
 
-        System.out.println("All threads have finished. Memory="+memory.getOccupiedSpace());
+        System.out.println("All threads have finished." +
+                "Number of objects in memory="+memory.getOccupiedSpace());
         System.out.println("Memory Content : "+memory);
         System.exit(0);
      }

@@ -5,25 +5,25 @@ public class ThreadProduire implements Runnable {
     private final Stockage stockage;
     private final int id;
     private final int iterations;
+    private final int sleeptime;
 
-    public ThreadProduire(Stockage stockage, int threadId, int iterations) {
+    public ThreadProduire(Stockage stockage, int threadId, int iterations, int sleeptime) {
         this.stockage = stockage;
         this.id = threadId;
         this.iterations = iterations;
+        this.sleeptime = sleeptime > 0 ? sleeptime : 2000;
     }
 
     @Override
     public void run() {
-        Object newObj = null;
         for (int i=0; i < iterations; i++) {
-            newObj = new Object();
-            this.stockage.produire(newObj, this);
+            this.stockage.produire(new Object(), this);
+            sleep(sleeptime);
         }
     }
 
     public void sleep(int millis) {
         try {
-            System.out.println("sleep time====="+millis);
             java.lang.Thread.sleep(millis);
         } catch (InterruptedException e) {
             UnexpectedSituation.exit("interrupted wait in producer thread ["+id+"]", e);

@@ -16,14 +16,14 @@ public class Stockage {
         int producerId = producer.getId();
         try {
             while (buffer.isFull()) {
-                System.out.println("PRODUCER "+producerId+" is waiting: memory full");
+                System.out.println("PRODUCER ["+producerId+"] is waiting: memory full");
                 wait();
             }
         } catch (InterruptedException e) {
             UnexpectedSituation.exit("interrupted wait in producteur " + producerId, e);
         }
         buffer.put(obj);
-        System.out.println( "Object produced by thread ["+producerId+"], Stockage= "+buffer.size());
+        System.out.println("PRODUCER ["+producerId+"] produced, Objects in memory= "+buffer.size());
 
         // Notify all other threads
         notifyAll();
@@ -43,7 +43,7 @@ public class Stockage {
             UnexpectedSituation.exit("interrupted wait in producteur "+consumerId, e);
         }
         consumedObj = this.buffer.pick();
-        System.out.println( "Object consumed by thread ["+consumerId+"], Stockage= "+this.buffer.size());
+        System.out.println("CONSUMER ["+consumerId+"] consumed, Objects in memory= "+this.buffer.size());
 
         // Notify all other threads
         notifyAll();
