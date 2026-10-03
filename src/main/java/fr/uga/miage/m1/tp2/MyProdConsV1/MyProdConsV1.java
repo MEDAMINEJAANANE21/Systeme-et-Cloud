@@ -1,6 +1,5 @@
 package fr.uga.miage.m1.tp2.MyProdConsV1;
 
-import fr.uga.miage.m1.tp2.UnexpectedSituation;
 import java.util.Random;
 
 public final class MyProdConsV1 {
@@ -8,7 +7,7 @@ public final class MyProdConsV1 {
     public static final int ITERATIONS = 50;
     private static final Random numGenerator = new Random(System.currentTimeMillis());
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
 
         Stockage memory = new Stockage(10);
 

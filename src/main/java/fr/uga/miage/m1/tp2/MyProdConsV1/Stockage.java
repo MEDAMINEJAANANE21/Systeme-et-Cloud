@@ -33,9 +33,8 @@ public class Stockage {
                 System.out.println("CONSUMER ["+consumerId+"] is waiting : memory empty");
                 wait();
             }
-            System.out.println("CONSUMER ["+consumerId+"] is waiting : memory empty");
         } catch (InterruptedException e) {
-            UnexpectedSituation.exit("interrupted wait in producteur "+consumerId, e);
+            UnexpectedSituation.exit("interrupted wait in consumer "+consumerId, e);
         }
         consumedObj = this.buffer.pick();
         System.out.println("CONSUMER ["+consumerId+"] consumed, Objects in memory= "+this.buffer.size());
