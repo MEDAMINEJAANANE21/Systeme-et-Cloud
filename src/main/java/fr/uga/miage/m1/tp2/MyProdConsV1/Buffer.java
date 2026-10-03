@@ -18,10 +18,12 @@ public class Buffer {
     public boolean isEmpty() { return numberOfElements <= 0; }
 
     public void put(Object obj) {
+        if (this.numberOfElements >= this.buffer.length) throw new RuntimeException("Some is trying to put in a full buffer >:(");
         this.buffer[numberOfElements++] = obj;
     }
 
     public Object pick() {
+        if (this.numberOfElements <= 0) throw new RuntimeException("Some is trying to pick form an empty buffer >:(");
         Object picked = this.buffer[numberOfElements-1];
         this.buffer[--numberOfElements] = null;
         return picked;
