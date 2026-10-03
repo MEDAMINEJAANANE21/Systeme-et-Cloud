@@ -7,7 +7,7 @@ public final class MyProdConsV1 {
     public static final int ITERATIONS = 50;
     private static final Random numGenerator = new Random(System.currentTimeMillis());
 
-    public static void main(String[] args) {
+    static void main() {
 
         Stockage memory = new Stockage(10);
 
