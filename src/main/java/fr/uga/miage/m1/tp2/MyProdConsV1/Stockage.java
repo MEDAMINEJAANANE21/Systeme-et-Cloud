@@ -26,7 +26,7 @@ public class Stockage {
 
     public synchronized Object consommer(ThreadConsommer consumer) {
         int consumerId = consumer.getId();
-        Object consumedObj = null;
+        Object consumedObj;
 
         try {
             while (buffer.isEmpty()) {
