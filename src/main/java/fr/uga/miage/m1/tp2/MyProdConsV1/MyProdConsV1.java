@@ -1,13 +1,14 @@
 package fr.uga.miage.m1.tp2.MyProdConsV1;
 
 import fr.uga.miage.m1.tp2.UnexpectedSituation;
+import java.util.Random;
 
-public class MyProdConsV1 {
+public final class MyProdConsV1 {
     public static final int NBTHREADS = 10;
     public static final int ITERATIONS = 50;
-    public static final int SLEEPTIME = 5000;
+    private static final Random numGenerator = new Random(System.currentTimeMillis());
 
-     static final void main(String[] args) {
+    static void main(String[] args) {
 
         Stockage memory = new Stockage(10);
 
@@ -15,9 +16,9 @@ public class MyProdConsV1 {
         Thread[] threadsCons = new Thread[NBTHREADS];
 
         for (int id=0; id < NBTHREADS; id++) {
-            threadsProd[id] = new Thread(new ThreadProduire(memory, id, ITERATIONS, SLEEPTIME));
+            threadsProd[id] = new Thread(new ThreadProduire(memory, id, ITERATIONS, numGenerator.nextInt(7000)));
             threadsProd[id].setName(id+"");
-            threadsCons[id] = new Thread(new ThreadConsommer(memory, id, ITERATIONS, SLEEPTIME));
+            threadsCons[id] = new Thread(new ThreadConsommer(memory, id, ITERATIONS, numGenerator.nextInt(7000)));
             threadsCons[id].setName((id+NBTHREADS)+"");
         }
 

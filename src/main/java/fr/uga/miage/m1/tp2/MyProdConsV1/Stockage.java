@@ -1,15 +1,10 @@
 package fr.uga.miage.m1.tp2.MyProdConsV1;
 
-import java.util.Arrays;
-import java.util.Random;
-
 public class Stockage {
-    private final Random numGenerator;
     private final Buffer buffer;
 
     Stockage(int taille) {
         this.buffer = new Buffer(taille);
-        this.numGenerator = new Random(System.currentTimeMillis());
     }
 
     public synchronized void produire(Object obj, ThreadProduire producer) {
@@ -49,13 +44,6 @@ public class Stockage {
         notifyAll();
 
         return consumedObj;
-    }
-
-    /** randint
-     *  Return random integer between 0 and max
-     */
-    public int randint(int max) {
-        return this.numGenerator.nextInt(max);
     }
 
     public int getOccupiedSpace() {
