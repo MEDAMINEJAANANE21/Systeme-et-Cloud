@@ -9,9 +9,12 @@ public class Buffer {
     private int numberOfElements;
 
     Buffer(int taille) {
-        this.buffer = taille > 0 ? new Object[taille] : new Object[DEFAULT_BUFFER_SIZE];
-        this.numberOfElements = 0;
-        Arrays.fill(buffer, null);
+        buffer = taille > 0
+                ? new Object[taille]
+                : new Object[DEFAULT_BUFFER_SIZE];
+
+        numberOfElements = 0;
+        // Arrays.fill(buffer, null);
     }
 
     public boolean isFull() { return numberOfElements >= buffer.length; }
@@ -33,8 +36,6 @@ public class Buffer {
 
     @Override
     public String toString() {
-        return "Buffer{" +
-                "buffer=" + Arrays.toString(buffer) +
-                '}';
+        return "Buffer=" + Arrays.toString(buffer);
     }
 }

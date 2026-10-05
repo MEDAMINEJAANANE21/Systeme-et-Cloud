@@ -20,7 +20,9 @@ public class ThreadConsommer implements Runnable {
     public void run() {
         for (int i=0; i < iterations; i++) {
             setLastConsumedObj(this.stockage.consommer(this));
+            System.out.println("-CONS["+id+"] is is going to eep zzz...");
             sleep(sleeptime);
+            System.out.println("-CONS["+id+"] just woke up :P");
         }
     }
 

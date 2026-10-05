@@ -11,14 +11,16 @@ public class ThreadProduire implements Runnable {
         this.stockage = stockage;
         this.id = threadId;
         this.iterations = iterations;
-        this.sleeptime = sleeptime > 0 ? sleeptime : 2000;
+        this.sleeptime = Math.min(sleeptime, 0);
     }
 
     @Override
     public void run() {
         for (int i=0; i < iterations; i++) {
             this.stockage.produire(new Object(), this);
+            System.out.println("+PROD["+id+"] is going to eep zzz...");
             sleep(sleeptime);
+            System.out.println("+PROD["+id+"] just woke up :P");
         }
     }
 

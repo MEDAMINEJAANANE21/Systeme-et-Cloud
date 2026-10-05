@@ -12,7 +12,7 @@ public final class MyProdConsV1 {
         return numGenerator.nextInt(MAXSLEEPTIME);
     }
 
-    static void main() {
+    public static void main() {
 
         Stockage memory = new Stockage(10);
 
@@ -21,9 +21,7 @@ public final class MyProdConsV1 {
 
         for (int id=0; id < NBTHREADS; id++) {
             threadsProd[id] = new Thread(new ThreadProduire(memory, id, ITERATIONS, getSleepTime()));
-            threadsProd[id].setName(id+"");
             threadsCons[id] = new Thread(new ThreadConsommer(memory, id, ITERATIONS, getSleepTime()));
-            threadsCons[id].setName((id+NBTHREADS)+"");
         }
 
         for (int i = 0; i < NBTHREADS; i++) {

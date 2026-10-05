@@ -11,14 +11,14 @@ public class Stockage {
         int producerId = producer.getId();
         try {
             while (buffer.isFull()) {
-                System.out.println("PRODUCER ["+producerId+"] is waiting: memory full");
+                System.out.println("+PROD["+producerId+"] is waiting: memory full");
                 wait();
             }
         } catch (InterruptedException e) {
             UnexpectedSituation.exit("interrupted wait in producteur " + producerId, e);
         }
         buffer.put(obj);
-        System.out.println("PRODUCER ["+producerId+"] produced, Objects in memory= "+buffer.size());
+        System.out.println("+PROD["+producerId+"] produced, Objects in memory= "+buffer.size());
 
         // Notify all other threads
         notifyAll();
@@ -30,14 +30,14 @@ public class Stockage {
 
         try {
             while (buffer.isEmpty()) {
-                System.out.println("CONSUMER ["+consumerId+"] is waiting : memory empty");
+                System.out.println("-CONS["+consumerId+"] is waiting : memory empty");
                 wait();
             }
         } catch (InterruptedException e) {
             UnexpectedSituation.exit("interrupted wait in consumer "+consumerId, e);
         }
         consumedObj = this.buffer.pick();
-        System.out.println("CONSUMER ["+consumerId+"] consumed, Objects in memory= "+this.buffer.size());
+        System.out.println("-CONS["+consumerId+"] consumed, Objects in memory= "+this.buffer.size());
 
         // Notify all other threads
         notifyAll();
@@ -45,14 +45,12 @@ public class Stockage {
         return consumedObj;
     }
 
-    public int getOccupiedSpace() {
+    public synchronized int getOccupiedSpace() {
         return this.buffer.size();
     }
 
     @Override
-    public String toString() {
-        return "Stockage{" +
-                "buffer=" + this.buffer +
-                '}';
+    public synchronized String toString() {
+        return "Stockage{" + this.buffer + '}';
     }
 }
