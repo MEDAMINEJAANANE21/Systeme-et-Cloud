@@ -40,7 +40,7 @@ Si on continue avec cette «mal chance» on constate que T2 risque de ne jamais 
 
 ### 3.4 Le problème des producteurs/consommateurs — version avec Moniteurs Java
 
-Voici mon implémentation de la class `Stockage` 
+Voici mon implémentation de la class `Stockage`
 
 ```java
 package fr.uga.miage.m1.tp2.MyProdConsV1;
@@ -56,14 +56,14 @@ public class Stockage {
         int producerId = producer.getId();
         try {
             while (buffer.isFull()) {
-                System.out.println("+PROD["+producerId+"] is waiting: memory full");
+                System.out.println("+PROD[" + producerId + "] is waiting: memory full");
                 wait();
             }
         } catch (InterruptedException e) {
             UnexpectedSituation.exit("interrupted wait in producteur " + producerId, e);
         }
         buffer.put(obj);
-        System.out.println("+PROD["+producerId+"] produced, Objects in memory= "+buffer.size());
+        System.out.println("+PROD[" + producerId + "] produced, Objects in memory= " + buffer.size());
 
         // Notify all other threads
         notifyAll();
@@ -75,14 +75,14 @@ public class Stockage {
 
         try {
             while (buffer.isEmpty()) {
-                System.out.println("-CONS["+consumerId+"] is waiting : memory empty");
+                System.out.println("-CONS[" + consumerId + "] is waiting : memory empty");
                 wait();
             }
         } catch (InterruptedException e) {
-            UnexpectedSituation.exit("interrupted wait in consumer "+consumerId, e);
+            UnexpectedSituation.exit("interrupted wait in consumer " + consumerId, e);
         }
         consumedObj = this.buffer.pick();
-        System.out.println("-CONS["+consumerId+"] consumed, Objects in memory= "+this.buffer.size());
+        System.out.println("-CONS[" + consumerId + "] consumed, Objects in memory= " + this.buffer.size());
 
         // Notify all other threads
         notifyAll();
@@ -102,3 +102,71 @@ public class Stockage {
 ```
 
 ### 3.5 Le problème des producteurs/consommateurs — version avec sémaphores n°1
+
+Voici mon implémentation de Stockage (`Storage` dans cette version) qui résoud le problème consommateur/producteur avec
+Les sémaphores de la libraire `java.util.concurrent.Semaphore;`:  
+
+```java
+package fr.uga.miage.m1.tp2.MyProdConsV2;
+
+import java.util.concurrent.Semaphore;
+
+public class Storage {
+    private final int STORAGE_SIZE;
+    private final Semaphore empty;
+    private final Semaphore full;
+    private final Semaphore mutex;
+    private final Buffer buffer;
+
+    Storage(int taille) {
+        this.STORAGE_SIZE = taille > 0
+                ? taille
+                : 100;
+        this.buffer = new Buffer(this.STORAGE_SIZE);
+        this.empty = new Semaphore(STORAGE_SIZE, true); // N cases vides au début
+        this.full = new Semaphore(0, true); // 0 cases pleines au début
+        this.mutex = new Semaphore(1, true);
+    }
+
+    public void produire(Object obj) throws InterruptedException {
+        putItem(obj);
+    }
+
+    public Object consommer() throws InterruptedException {
+        return getItem();
+    }
+
+
+    private Object getItem() throws InterruptedException {
+        Object consumed;
+        full.acquire();
+        mutex.acquire();
+        consumed = buffer.pick();
+        mutex.release();
+        empty.release();
+        return consumed;
+    }
+
+    private void putItem(Object obj) throws InterruptedException {
+        empty.acquire();
+        mutex.acquire();
+        buffer.put(obj);
+        mutex.release();
+        full.release();
+    }
+
+    public int getOccupiedSpace() throws InterruptedException {
+        mutex.acquire();
+        int size = this.buffer.size();
+        mutex.release();
+        return size;
+    }
+
+    @Override
+    public synchronized String toString() {
+        return "Stockage{" + this.buffer + '}';
+    }
+}
+```
+
+### 3.6 Sémaphores en Java

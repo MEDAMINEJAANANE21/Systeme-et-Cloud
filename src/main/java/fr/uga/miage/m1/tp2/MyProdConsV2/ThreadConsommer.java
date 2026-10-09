@@ -1,15 +1,15 @@
-package fr.uga.miage.m1.tp2.MyProdConsV1;
+package fr.uga.miage.m1.tp2.MyProdConsV2;
 
 
 public class ThreadConsommer implements Runnable {
-    private final Stockage stockage;
+    private final Storage storage;
     private final int id;
     private Object lastConsumedObj;
     private final int iterations;
     private final int sleeptime;
 
-    public ThreadConsommer(Stockage stockage, int threadId, int iterations, int sleeptime) {
-        this.stockage = stockage;
+    public ThreadConsommer(Storage storage, int threadId, int iterations, int sleeptime) {
+        this.storage = storage;
         this.id = threadId;
         this.lastConsumedObj = null;
         this.iterations = iterations;
@@ -19,7 +19,12 @@ public class ThreadConsommer implements Runnable {
     @Override
     public void run() {
         for (int i=0; i < iterations; i++) {
-            setLastConsumedObj(this.stockage.consommer(this));
+            try {
+                setLastConsumedObj(this.storage.consommer());
+                System.out.println("-CONS["+id+"] consumed, Objects in memory= "+ storage.getOccupiedSpace());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             System.out.println("-CONS["+id+"] is is going to eep zzz...");
             sleep(sleeptime);
             System.out.println("-CONS["+id+"] just woke up :P");
@@ -28,17 +33,15 @@ public class ThreadConsommer implements Runnable {
 
     public void sleep(int millis) {
         try {
-            java.lang.Thread.sleep(millis);
+            Thread.sleep(millis);
         } catch (InterruptedException e) {
-            UnexpectedSituation.exit("interrupted sleep in consumer thread ["+id+"]", e);
+            UnexpectedSituation.exit("interrupted wait in consumer thread ["+id+"]", e);
         }
     }
 
     private void setLastConsumedObj(Object obj) {
         this.lastConsumedObj = obj;
     }
-
-    public int getId() { return this.id; }
 
     public Object getLastConsumedObj() {
         return lastConsumedObj;

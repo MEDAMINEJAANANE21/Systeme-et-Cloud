@@ -28,7 +28,7 @@ public class ThreadProduire implements Runnable {
         try {
             java.lang.Thread.sleep(millis);
         } catch (InterruptedException e) {
-            UnexpectedSituation.exit("interrupted wait in producer thread ["+id+"]", e);
+            UnexpectedSituation.exit("interrupted sleep in producer thread ["+id+"]", e);
         }
     }
 
