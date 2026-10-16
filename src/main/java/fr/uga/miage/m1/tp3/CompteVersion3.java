@@ -1,3 +1,5 @@
+package fr.uga.miage.m1.tp3;
+
 class CompteVersion3 extends Compte {
 
     protected double solde;

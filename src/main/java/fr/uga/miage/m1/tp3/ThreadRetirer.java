@@ -1,3 +1,5 @@
+package fr.uga.miage.m1.tp3;
+
 /**
  * Thread qui retire
  */
