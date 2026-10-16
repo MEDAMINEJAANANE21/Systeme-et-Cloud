@@ -382,14 +382,328 @@ public class SharedRsc {
 ```
 
 ### 4 - Compléments sur les lecteurs-rédacteurs :
+Les trois variantes sont testées avec le même scénario (classe Scenario) : L1 lit de 0 à 600 ms ; R1 demande à écrire à 100 ms ; L2, L3, R2 et L4 arrivent à 200, 300, 400 et 500 ms. Dans chaque paquetage (RWPrioLecteurs, RWPrioRedacteurs, RWFifo), seule la classe SharedRsc change ; les autres classes sont celles de la question 2.
 
+
+`Scenario.java`
+```java
+public class Scenario {
+    private static final SharedRsc ressource = new SharedRsc();
+    private static final Fichier fichier = new Fichier();
+
+    private static Thread lancer(String nom, boolean ecriture, int debutMs, int dureeMs) {
+        Thread t = new Thread(() -> {
+            try {
+                Thread.sleep(debutMs);
+                System.out.println(nom + " DEMANDE " + (ecriture ? "l'ecriture" : "la lecture"));
+                if (ecriture) {
+                    ressource.beginWrite();
+                    try { fichier.ecrire(dureeMs); } finally { ressource.endWrite(); }
+                } else {
+                    ressource.beginRead();
+                    try { fichier.lire(dureeMs); } finally { ressource.endRead(); }
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }, nom);
+        t.start();
+        return t;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread[] ts = {
+            lancer("L1", false,   0, 600),   // L1 lit de 0 a 600 ms
+            lancer("R1", true,  100, 300),   // R1 demande a ecrire a 100 ms
+            lancer("L2", false, 200, 300),   // L2 arrive a 200 ms
+            lancer("L3", false, 300, 300),   // L3 arrive a 300 ms
+            lancer("R2", true,  400, 300),   // R2 demande a ecrire a 400 ms
+            lancer("L4", false, 500, 300)    // L4 arrive a 500 ms
+        };
+        for (Thread t : ts) t.join();
+        System.out.println("Fin : " + fichier.getViolations() + " violation(s)");
+    }
+}
+
+```
 ### 4.1 -  Priorité aux lecteurs :
+Un compteur lecteursEnAttente est ajouté. Un lecteur n'attend que si un rédacteur écrit. Un rédacteur attend tant que ecriture, lecteurs > 0 ou lecteursEnAttente > 0. À la fin d'une écriture, les lecteurs en attente sont réveillés en priorité.
 
-### 4.2 - Priorité aux rédacteurs : 
+`SharedRsc.java`
+```java
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
-### 4.3 Ordre FIFO garanti : 
+public class SharedRsc {
+    private final ReentrantLock verrou = new ReentrantLock();
+    private final Condition peutLire = verrou.newCondition();
+    private final Condition peutEcrire = verrou.newCondition();
 
+    private int lecteurs = 0;
+    private int lecteursEnAttente = 0;
+    private boolean ecriture = false;
 
+    public void beginRead() throws InterruptedException {
+        String nom = Thread.currentThread().getName();
+        verrou.lock();
+        try {
+            lecteursEnAttente++;
+            try {
+                while (ecriture) {       // seul un redacteur en train d'ecrire bloque un lecteur
+                    System.out.println(nom + " (lecteur) attend : un redacteur ecrit");
+                    peutLire.await();
+                    System.out.println(nom + " (lecteur) se reveille");
+                }
+            } finally {
+                lecteursEnAttente--;
+            }
+            lecteurs++;
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public void endRead() {
+        verrou.lock();
+        try {
+            lecteurs--;
+            if (lecteurs == 0) {
+                peutEcrire.signal();
+            }
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public void beginWrite() throws InterruptedException {
+        String nom = Thread.currentThread().getName();
+        verrou.lock();
+        try {
+            while (ecriture || lecteurs > 0 || lecteursEnAttente > 0) {
+                System.out.println(nom + " (redacteur) attend : des lecteurs lisent ou attendent");
+                peutEcrire.await();
+                System.out.println(nom + " (redacteur) se reveille");
+            }
+            ecriture = true;
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public void endWrite() {
+        verrou.lock();
+        try {
+            ecriture = false;
+            if (lecteursEnAttente > 0) {
+                peutLire.signalAll();    // les lecteurs passent avant les autres redacteurs
+            } else {
+                peutEcrire.signal();
+            }
+        } finally {
+            verrou.unlock();
+        }
+    }
+}
+
+```
+
+### 4.2 - Priorité aux rédacteurs :
+Un compteur redacteursEnAttente est ajouté. Un lecteur attend tant qu'un rédacteur écrit ou attend. À la fin d'une écriture, un rédacteur en attente est réveillé en priorité ; les lecteurs ne le sont que s'il n'y en a plus.
+
+`SharedRsc.java`
+```java
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class SharedRsc {
+    private final ReentrantLock verrou = new ReentrantLock();
+    private final Condition peutLire = verrou.newCondition();
+    private final Condition peutEcrire = verrou.newCondition();
+
+    private int lecteurs = 0;
+    private int redacteursEnAttente = 0;
+    private boolean ecriture = false;
+
+    public void beginRead() throws InterruptedException {
+        String nom = Thread.currentThread().getName();
+        verrou.lock();
+        try {
+            while (ecriture || redacteursEnAttente > 0) {
+                System.out.println(nom + " (lecteur) attend : un redacteur ecrit ou attend");
+                peutLire.await();
+                System.out.println(nom + " (lecteur) se reveille");
+            }
+            lecteurs++;
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public void endRead() {
+        verrou.lock();
+        try {
+            lecteurs--;
+            if (lecteurs == 0) {
+                peutEcrire.signal();
+            }
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public void beginWrite() throws InterruptedException {
+        String nom = Thread.currentThread().getName();
+        verrou.lock();
+        try {
+            redacteursEnAttente++;
+            try {
+                while (ecriture || lecteurs > 0) {
+                    System.out.println(nom + " (redacteur) attend : la ressource est utilisee");
+                    peutEcrire.await();
+                    System.out.println(nom + " (redacteur) se reveille");
+                }
+            } finally {
+                redacteursEnAttente--;
+            }
+            ecriture = true;
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public void endWrite() {
+        verrou.lock();
+        try {
+            ecriture = false;
+            if (redacteursEnAttente > 0) {
+                peutEcrire.signal();     // le redacteur suivant passe avant tous les lecteurs
+            } else {
+                peutLire.signalAll();
+            }
+        } finally {
+            verrou.unlock();
+        }
+    }
+}
+```
+
+### 4.3 Ordre FIFO garanti :
+
+Les demandes qui ne peuvent pas entrer immédiatement sont mises dans une file d'attente, et chaque thread attend sur sa
+propre Condition. La méthode admettre() fait entrer, dans l'ordre, les demandes de tête de file qui le peuvent : des lecteurs
+consécutifs entrent ensemble, un rédacteur entre seul, et on ne dépasse jamais une demande qui attend.
+
+`SharedRsc.java`
+```java
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class SharedRsc {
+
+    private static class Demande {
+        final boolean ecrivain;
+        final Condition condition;
+        boolean admise = false;
+
+        Demande(boolean ecrivain, Condition condition) {
+            this.ecrivain = ecrivain;
+            this.condition = condition;
+        }
+    }
+
+    private final ReentrantLock verrou = new ReentrantLock();
+    private final Deque<Demande> file = new ArrayDeque<>();
+    private int lecteurs = 0;
+    private boolean ecriture = false;
+
+    private void admettre() {
+        while (!file.isEmpty()) {
+            Demande d = file.peekFirst();
+            if (d.ecrivain) {
+                if (ecriture || lecteurs > 0) return;
+                ecriture = true;
+            } else {
+                if (ecriture) return;
+                lecteurs++;
+            }
+            file.pollFirst();
+            d.admise = true;
+            d.condition.signal();
+        }
+    }
+
+    private void attendre(Demande d, String type) throws InterruptedException {
+        String nom = Thread.currentThread().getName();
+        System.out.println(nom + " (" + type + ") attend son tour");
+        try {
+            while (!d.admise) {
+                d.condition.await();
+            }
+        } catch (InterruptedException e) {
+            if (d.admise) {
+                if (d.ecrivain) ecriture = false; else lecteurs--;
+            } else {
+                file.remove(d);
+            }
+            admettre();
+            throw e;
+        }
+        System.out.println(nom + " (" + type + ") se reveille : c'est son tour");
+    }
+
+    public void beginRead() throws InterruptedException {
+        verrou.lock();
+        try {
+            if (file.isEmpty() && !ecriture) {
+                lecteurs++;
+                return;
+            }
+            Demande d = new Demande(false, verrou.newCondition());
+            file.addLast(d);
+            attendre(d, "lecteur");
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public void endRead() {
+        verrou.lock();
+        try {
+            lecteurs--;
+            admettre();
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public void beginWrite() throws InterruptedException {
+        verrou.lock();
+        try {
+            if (file.isEmpty() && !ecriture && lecteurs == 0) {
+                ecriture = true;
+                return;
+            }
+            Demande d = new Demande(true, verrou.newCondition());
+            file.addLast(d);
+            attendre(d, "redacteur");
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public void endWrite() {
+        verrou.lock();
+        try {
+            ecriture = false;
+            admettre();
+        } finally {
+            verrou.unlock();
+        }
+    }
+}
+```
 
 
 
