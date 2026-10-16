@@ -240,11 +240,146 @@ R2 (redacteur) se reveille
 R2 ECRIT
 ```
 
-
-
 ### 3.1 - Tampon producteurs-consommateurs avec Lock et Condition :
 
+La classe Stockage utilise un ReentrantLock et deux Condition : pasPlein (où attendent les producteurs) et pasVide
+(où attendent les consommateurs). Après une production on appelle pasVide.signal(), après une consommation pasPlein.signal().
+notifyAll() n'est plus utilisé. Les classes Producteur, Consommateur et Main sont celles de la version avec moniteurs (paquetage MyProdConsV4).
+
+`Stockage.java`
+```java
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Stockage {
+    private final Object[] tampon;
+    private int tete = 0;
+    private int queue = 0;
+    private int nbElements = 0;
+
+    private final ReentrantLock verrou = new ReentrantLock();
+    private final Condition pasPlein = verrou.newCondition();
+    private final Condition pasVide = verrou.newCondition();
+
+    public Stockage(int capacite) {
+        tampon = new Object[capacite];
+    }
+
+    public void produire(Object o) throws InterruptedException {
+        String nom = Thread.currentThread().getName();
+        verrou.lock();
+        try {
+            while (nbElements == tampon.length) {
+                System.out.println(nom + " : stockage PLEIN, je m'endors");
+                pasPlein.await();
+                System.out.println(nom + " : je me reveille (producteur)");
+            }
+            tampon[queue] = o;
+            queue = (queue + 1) % tampon.length;
+            nbElements++;
+            System.out.println(nom + " produit " + o + "  [" + nbElements + "/" + tampon.length + "]");
+            pasVide.signal();
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public Object consommer() throws InterruptedException {
+        String nom = Thread.currentThread().getName();
+        verrou.lock();
+        try {
+            while (nbElements == 0) {
+                System.out.println(nom + " : stockage VIDE, je m'endors");
+                pasVide.await();
+                System.out.println(nom + " : je me reveille (consommateur)");
+            }
+            Object o = tampon[tete];
+            tampon[tete] = null;
+            tete = (tete + 1) % tampon.length;
+            nbElements--;
+            System.out.println(nom + " consomme " + o + "  [" + nbElements + "/" + tampon.length + "]");
+            pasPlein.signal();
+            return o;
+        } finally {
+            verrou.unlock();
+        }
+    }
+}
+```
+
 ### 3.2 - Lecteurs-rédacteurs avec Lock et Condition :
+
+La classe SharedRsc utilise deux Condition : peutLire et peutEcrire. Quand le dernier lecteur sort, un seul rédacteur
+est réveillé (peutEcrire.signal()). Quand un rédacteur termine, tous les lecteurs sont réveillés (peutLire.signalAll())
+ainsi qu'un rédacteur. Les autres classes sont celles de la question 2 (paquetage RWLock).
+
+`SharedRsc.java`
+```java
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class SharedRsc {
+    private final ReentrantLock verrou = new ReentrantLock();
+    private final Condition peutLire = verrou.newCondition();
+    private final Condition peutEcrire = verrou.newCondition();
+
+    private int lecteurs = 0;
+    private boolean ecriture = false;
+
+    public void beginRead() throws InterruptedException {
+        String nom = Thread.currentThread().getName();
+        verrou.lock();
+        try {
+            while (ecriture) {
+                System.out.println(nom + " (lecteur) attend : un redacteur ecrit");
+                peutLire.await();
+                System.out.println(nom + " (lecteur) se reveille");
+            }
+            lecteurs++;
+        } finally {
+            verrou.unlock();
+        }
+    }
+    
+     public void endRead() {
+        verrou.lock();
+        try {
+            lecteurs--;
+            if (lecteurs == 0) {
+                peutEcrire.signal();
+            }
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public void beginWrite() throws InterruptedException {
+        String nom = Thread.currentThread().getName();
+        verrou.lock();
+        try {
+            while (ecriture || lecteurs > 0) {
+                System.out.println(nom + " (redacteur) attend : la ressource est utilisee");
+                peutEcrire.await();
+                System.out.println(nom + " (redacteur) se reveille");
+            }
+            ecriture = true;
+        } finally {
+            verrou.unlock();
+        }
+    }
+
+    public void endWrite() {
+        verrou.lock();
+        try {
+            ecriture = false;
+            peutLire.signalAll();
+            peutEcrire.signal();
+        } finally {
+            verrou.unlock();
+        }
+    }
+}
+```
 
 ### 4 - Compléments sur les lecteurs-rédacteurs :
 
